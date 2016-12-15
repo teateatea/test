@@ -1,0 +1,88 @@
+TeaAnnouncerClock:
+  type: world
+  debug: false
+  events:
+    on system time minutely:
+      - if <server.flag[TeaAnnouncerFrequencyCounter]||0> > 0 {
+        - flag server TeaAnnouncerFrequencyCounter:--
+        }
+        else {
+        - flag server TeaAnnouncerFrequencyCounter:<server.flag[TeaAnnouncerFrequency]||4>
+        - run TeaAnnouncerHandler
+        }
+
+TeaAnnouncerHandler:
+  type: task
+  debug: false
+  definitions: script|title|subTitle|command|page|pageWidth|pageHeight
+  script:
+    - if <server.flag[TeaAnnouncerPermListCounter]||0> < <server.flag[TeaAnnouncerPermList].size||1> {
+      - narrate "<server.flag[TeaAnnouncerPermList].get[<server.flag[TeaAnnouncerPermListCounter]||1>]||<proc[msgHover].context[<green><&gt> This is an Announcement!|<green>Tea.Announcer is active but unconfigured!<&nl><yellow>Please notify a Dev immediately if you see this announcement.<&nl><&nl><gray>Task: <yellow>Tea.Announcer.Handler<&nl><gray>-.-.Perm.List.Counter: <yellow><server.flag[TeaAnnouncerPermListCounter]||00><&nl><gray>-.-.Perm.List.Size: <yellow><server.flag[TeaAnnouncerPermList].size||00> <&nl><gray>Recommendation: <yellow>Run /tannounce or fill -.-.Perm.List]>>" targets:<server.list_online_players.exclude[<server.get_online_players_flagged[GlobalChatOff]>]>
+      - flag server TeaAnnouncerPermListCounter:++
+      }
+      else {
+      - narrate "<server.flag[TeaAnnouncerPermList].get[<server.flag[TeaAnnouncerPermListCounter]||1>]||<proc[msgHover].context[<green><&gt> This is an Announcement!|<green>Tea.Announcer is active but unconfigured!<&nl><yellow>Please notify a Dev immediately if you see this announcement.<&nl><&nl><gray>Task: <yellow>Tea.Announcer.Handler<&nl><gray>-.-.Perm.List.Counter: <yellow><server.flag[TeaAnnouncerPermListCounter]||00><&nl><gray>-.-.Perm.List.Size: <yellow><server.flag[TeaAnnouncerPermList].size||00> <&nl><gray>Recommendation: <yellow>Run /tannounce or fill -.-.Perm.List]>>" targets:<server.list_online_players.exclude[<server.get_online_players_flagged[GlobalChatOff]>]>
+      - flag server TeaAnnouncerPermListCounter:1
+      }
+
+TeaAnnouncerCommands:
+  type: command
+  debug: false
+  name: tannounce
+  description: tea announce
+  usage: /tannounce
+  permission: local.permission.node
+  permission message: Sorry, <player.name>, you can't use my command because you don't have the permission '<permission>'!
+  Default Constants:
+    Shop: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Donate For Special Perks!|rcommunitymc.com/shop|<gold>Click to open our Web Shop!]>
+    Support: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/support|<red>RCommunityMC.com]><proc[msgUrl].context[ <aqua>Report In-Game Issues to the Support Forums!|rcommunitymc.com/support|<aqua>Click to open our Support Forums!]>
+    Upgrade: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop#lifetime-upgrade-878816|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Upgrade to the Next Tier!|rcommunitymc.com/shop#lifetime-upgrade-878816|<gold>Click here to Upgrade!]><proc[msgUrl].context[ <gray>Earn New Perks!|rcommunitymc.com/shop#lifetime-upgrade-878816|<gray>Click here to Upgrade!]>
+    Website: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/home|<red>RCommunityMC.com]><proc[msgUrl].context[ <aqua>Check out our website!|rcommunitymc.com/home|<aqua>Click to open our Website!]><proc[msgUrl].context[ <gold>RCommunityMC.com|rcommunitymc.com/home|<gold>Click to open our Website!]>
+    Lucky: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop#lucky-keys-885670|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Are <gold>You <gold>Feeling <gold>Lucky?|rcommunitymc.com/shop#lucky-keys-885670|<gold>Click here to get Lucky!]><proc[msgUrl].context[ <gray>Win <gray>Your <gray>Lucky <gray>Chest <gray>Today!|rcommunitymc.com/shop#lucky-keys-885670|<gray>Click here to get Lucky!]>
+
+    Vote: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/home|<red>RCommunityMC.com]><proc[msgUrl].context[ <green>Vote Daily for Free Rewards!|rcommunitymc.com/home|<green>Click to vote on the sidebar!]>
+    Rules: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/rules|<red>RCommunityMC.com]><proc[msgUrl].context[ <aqua>Review the Rules here!|rcommunitymc.com/rules|<aqua>Click to open the Rules!]>
+    Details: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Kits! Money! Backpack! Kitty Cannon!|rcommunitymc.com/shop|<gold>Click to open our Web Shop!]><proc[msgUrl].context[ <gray>Get Yours Here!|rcommunitymc.com/shop|<gray>Click to open our Web Shop!]>
+    Pet: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop#pets-741177|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Get <gold>Your <gold>New <gold>Pet <gold>Today!|rcommunitymc.com/shop#pets-741177|<gold>Click here to get your Pet!]><proc[msgUrl].context[ <gray>Passive <gray>or <gray>Hostile!|rcommunitymc.com/shop#pets-741177|<gray>Click here to get your Pet!]>
+    TeamSpeak: <proc[msgUrl].context[<red><&lb>TEAMSPEAK<&rb>|ts3.rcommunitymc.com|<red>ts3.rcommunitymc.com]> <proc[msgUrl].context[<aqua>Join us on TeamSpeak 3!|ts3.rcommunitymc.com|<aqua>Click and copy to clipboard!]>
+
+    TeamSpeak2: <proc[msgUrl].context[<red><&lb>TEAMSPEAK<&rb>|ts3.rcommunitymc.com|<red>ts3.rcommunitymc.com]> <proc[msgUrl].context[<aqua>Come talk with us on TeamSpeak 3!|ts3.rcommunitymc.com|<aqua>Click and copy to clipboard!]>
+    Dynmap: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/dynmap|<red>RCommunityMC.com]><proc[msgUrl].context[ <aqua>We have a DynMap!|rcommunitymc.com/dynmap|<aqua>Click to view the Dynmap!]><proc[msgUrl].context[ <gray>I can show you the world!|rcommunitymc.com/dynmap|<gray>Shining! Shimmering! Splendid!]>
+    Dynmap2: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/dynmap|<red>RCommunityMC.com]><proc[msgUrl].context[ <aqua>We have a DynMap!|rcommunitymc.com/dynmap|<aqua>Click to view the Dynmap!]><proc[msgUrl].context[ <gray>A whole new world!|rcommunitymc.com/dynmap|<gray>A new fantastic point of view!]>
+    Gates: <proc[msgUrl].context[<red><&lb>CLICK<&rb>|rcommunitymc.com/shop|<red>RCommunityMC.com]><proc[msgUrl].context[ <gold>Working Gates and Bridges!|rcommunitymc.com/shop|<gold>Click to open our Web Shop!]><proc[msgUrl].context[ <gray>Donators only!|rcommunitymc.com/shop|<gray>Click to open our Web Shop!]>
+
+    Helpop: Helpop
+    Global: global
+
+
+  script:
+    - flag server TeaAnnouncerPermList:!
+    - flag server TeaAnnouncerPermList:->:<script.constant[Vote]>
+    
+    - flag server TeaAnnouncerPermList:->:<script.constant[Shop]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Support]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Gates]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Dynmap2]>
+
+    - flag server TeaAnnouncerPermList:->:<script.constant[Upgrade]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Website]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Lucky]>
+
+    - flag server TeaAnnouncerPermList:->:<script.constant[TeamSpeak2]>
+
+    - flag server TeaAnnouncerPermList:->:<script.constant[Vote]>
+
+    - flag server TeaAnnouncerPermList:->:<script.constant[Rules]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Details]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Dynmap]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[Pet]>
+
+    - flag server TeaAnnouncerPermList:->:<script.constant[Website]>
+    - flag server TeaAnnouncerPermList:->:<script.constant[TeamSpeak]>
+    
+
+
+    - narrate "Announcements have been updated <&lb><server.flag[TeaAnnouncerPermList].size||None><&rb>:"
+    - foreach <server.flag[TeaAnnouncerPermList].as_list> {
+      - narrate "%value%"}
+    - narrate "Announcement Frequency: Every <server.flag[TeaAnnouncerFrequency]||4> minutes"
